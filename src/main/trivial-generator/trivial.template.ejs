@@ -36,6 +36,24 @@
         </div>
     </div>
 
+    <!--Confirm Modal-->
+    <div class="fixed hidden inset-0 z-20 bg-gray-600 bg-opacity-50 h-full w-full" id="confirm-modal-overlay">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="modal-body mt-3">
+                <h3 class="text-lg text-center leading-6 font-medium text-gray-900">Confirm</h3>
+                <p id="confirm-modal-message" class="modal-message"></p>
+                <div class="confirm-modal-actions">
+                    <button id="confirm-modal-cancel-btn" class="modal-cancel-btn px-4 py-2 rounded-md">
+                        Cancel
+                    </button>
+                    <button id="confirm-modal-confirm-btn" class="modal-danger-btn px-4 py-2 rounded-md">
+                        Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Content -->
     <h1 class="trivial-title text-3xl ml-5 mt-5"><%= trivialType.charAt(0).toUpperCase() + trivialType.slice(1) %> Trivial</h1>
     <div class="flex justify-around w-full py-0 px-5 mt-5 gap-5 overflow-y-auto">
@@ -64,7 +82,7 @@
             </div>
 
             <div id="div-scoreboard" class="w-full">
-                <div class="flex gap-2 justify-center">
+                <div class="btn-row">
                     <button
                         class="add-player-btn w-28 p-1 flex border border-black shadow-sm text-sm font-medium rounded-md text-white bg-teal-500 hover:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                         onclick="addPlayer()">
@@ -254,6 +272,8 @@
             currentId = songId;
             currentEmbeddable = songPanel.dataset.embeddable === "true";
             currentError = songPanel.dataset.error === "true";
+
+            resetRoundPoints();
         }
 
         function removeFocus(songId) {
@@ -299,6 +319,53 @@
         }
 
         // ************
+        //  ROUND POINTS
+        // ************
+        // Tracks points awarded since the current song started, so the host
+        // can visually confirm every player was scored before moving on.
+        function updateRoundPoints(roundPointsSpan, value) {
+            roundPointsSpan.dataset.roundScore = value;
+
+            if (value === 0) {
+                roundPointsSpan.textContent = "No points";
+                roundPointsSpan.classList.remove("round-points-awarded");
+            } else {
+                const sign = value > 0 ? "+" : "";
+                const unit = Math.abs(value) === 1 ? "point" : "points";
+                roundPointsSpan.textContent = `${sign}${value} ${unit}`;
+                roundPointsSpan.classList.add("round-points-awarded");
+            }
+        }
+
+        function resetRoundPoints() {
+            document.querySelectorAll(".round-points").forEach((span) => updateRoundPoints(span, 0));
+            saveGameState();
+        }
+
+        // ************
+        //  CONFIRM MODAL
+        // ************
+        let confirmModalCallback = null;
+
+        function openConfirmModal(message, onConfirm) {
+            document.getElementById("confirm-modal-message").textContent = message;
+            confirmModalCallback = onConfirm;
+            document.getElementById("confirm-modal-overlay").style.display = "block";
+        }
+
+        function closeConfirmModal() {
+            document.getElementById("confirm-modal-overlay").style.display = "none";
+            confirmModalCallback = null;
+        }
+
+        document.getElementById("confirm-modal-cancel-btn").onclick = closeConfirmModal;
+        document.getElementById("confirm-modal-confirm-btn").onclick = () => {
+            const callback = confirmModalCallback;
+            closeConfirmModal();
+            if (callback) callback();
+        };
+
+        // ************
         //  PERSISTENCE
         // ************
         // Chromium shares one localStorage bucket across every file:// page
@@ -322,11 +389,13 @@
                 const number = getPlayerNumber(playerDiv);
                 const nameInput = document.getElementById(`name-${number}`);
                 const scoreSpan = document.getElementById(`score-number-${number}`);
+                const roundSpan = document.getElementById(`round-points-${number}`);
 
                 return {
                     name: nameInput.value,
                     confirmed: nameInput.disabled,
-                    score: scoreSpan ? parseInt(scoreSpan.innerHTML) : 0
+                    score: scoreSpan ? parseInt(scoreSpan.innerHTML) : 0,
+                    roundScore: roundSpan ? parseInt(roundSpan.dataset.roundScore) : 0
                 };
             });
 
@@ -374,6 +443,10 @@
                 if (player.confirmed) {
                     confirmPlayer(document.getElementById(`confirm-player-${number}`));
                     document.getElementById(`score-number-${number}`).innerHTML = player.score;
+                    updateRoundPoints(
+                        document.getElementById(`round-points-${number}`),
+                        player.roundScore || 0
+                    );
                 }
             });
 

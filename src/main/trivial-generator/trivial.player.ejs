@@ -9,18 +9,27 @@
                 parseInt(Array.from(players).at(-1).id.split("-").at(-1)) + 1;
         }
 
-        const newPlayer = `<div id="player-${newPlayerNumber}" name="player" class="flex justify-start border gap-0 border-black rounded w-full bg-sky-300 p-2">
+        const newPlayer = `<div id="player-${newPlayerNumber}" name="player" class="player-card border border-black rounded w-full bg-sky-300 p-2">
+            <div class="player-row">
             <div class="w-9/12" id="div-name-${newPlayerNumber}">
             <input id="name-${newPlayerNumber}" type="text" placeholder="New player" class="player-name-input px-1 bg-transparent w-full" onkeydown="enterName(event);">
             </div>
-            <div>
+            <div id="pre-confirm-actions-${newPlayerNumber}" class="player-actions flex-shrink-0">
             <button class="player-icon-btn" onclick="confirmPlayer(this);" id="confirm-player-${newPlayerNumber}">✅</button>
             <button class="player-icon-btn" onclick="deletePlayer(this);" id="delete-player-${newPlayerNumber}">❌</button>
             </div>
-            <div id="score-player-${newPlayerNumber}" class="flex justify-end gap-0 w-24 box-border" style="display:none">
+            <div id="post-confirm-name-actions-${newPlayerNumber}" class="player-actions flex-shrink-0" style="display:none">
+            <button class="player-icon-btn" onclick="editPlayerName(this);" id="edit-player-${newPlayerNumber}" title="Rename">✏️</button>
+            <button class="player-icon-btn" onclick="requestDeletePlayer(this);" id="remove-player-${newPlayerNumber}" title="Remove player">🗑️</button>
+            </div>
+            </div>
+            <div id="score-row-${newPlayerNumber}" class="player-row" style="display:none">
+            <span id="round-points-${newPlayerNumber}" class="round-points" data-round-score="0">No points</span>
+            <div class="flex gap-0">
             <button id="score-minus-${newPlayerNumber}" class="score-btn score-btn-minus w-5 h-6 rounded-tl rounded-bl" onclick="editScore(this, 'remove');"> - </button>
             <span id="score-number-${newPlayerNumber}" class="score-number text-center w-8 h-6"> 0 </span>
             <button id="score-plus-${newPlayerNumber}" class="score-btn score-btn-plus w-5 h-6 rounded-tr rounded-br" onclick="editScore(this, 'add');"> + </button>
+            </div>
             </div>
         </div>`;
         playersDiv.insertAdjacentHTML("beforeend", newPlayer);
@@ -60,13 +69,34 @@
         document.getElementById(`div-name-${playerNumber}`).style.width =
             "fit-content";
 
-        button.remove();
-        document.getElementById(`delete-player-${playerNumber}`).remove();
-
-        const scoreDiv = document.getElementById(`score-player-${playerNumber}`);
-        scoreDiv.style.display = "flex";
+        document.getElementById(`pre-confirm-actions-${playerNumber}`).style.display = "none";
+        document.getElementById(`post-confirm-name-actions-${playerNumber}`).style.display = "flex";
+        document.getElementById(`score-row-${playerNumber}`).style.display = "flex";
 
         saveGameState();
+    }
+
+    function editPlayerName(button) {
+        const playerNumber = getPlayerNumber(button);
+        const nameInput = document.getElementById(`name-${playerNumber}`);
+
+        nameInput.disabled = false;
+        document.getElementById(`div-name-${playerNumber}`).style.width = "";
+
+        document.getElementById(`post-confirm-name-actions-${playerNumber}`).style.display = "none";
+        document.getElementById(`pre-confirm-actions-${playerNumber}`).style.display = "flex";
+
+        nameInput.focus();
+        nameInput.select();
+    }
+
+    function requestDeletePlayer(button) {
+        const playerNumber = getPlayerNumber(button);
+        const name = document.getElementById(`name-${playerNumber}`).value || "this player";
+
+        openConfirmModal(`Remove ${name}? This can't be undone.`, () => {
+            deletePlayer(button);
+        });
     }
 
     function deletePlayer(button) {
@@ -80,11 +110,14 @@
     function editScore(button, mode) {
         const playerNumber = getPlayerNumber(button);
         const scoreNumber = document.getElementById(`score-number-${playerNumber}`);
+        const roundPoints = document.getElementById(`round-points-${playerNumber}`);
 
         const score = parseInt(scoreNumber.innerHTML);
         const newScore = mode == "add" ? score + 1 : score - 1;
-
         scoreNumber.innerHTML = newScore;
+
+        const roundValue = parseInt(roundPoints.dataset.roundScore) + (mode == "add" ? 1 : -1);
+        updateRoundPoints(roundPoints, roundValue);
 
         saveGameState();
     }
