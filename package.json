@@ -1,6 +1,6 @@
 {
   "name": "trivial-generator-react",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
   "author": "example.com",
@@ -17,6 +17,7 @@
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && node scripts/download-yt-dlp.js win32 && electron-builder --dir",
     "build:win": "npm run build && node scripts/download-yt-dlp.js win32 && electron-builder --win=portable",
+    "build:win:share": "cross-env MAIN_VITE_ENABLE_DEBUG_LOG=false npm run build:win",
     "build:mac": "electron-vite build && node scripts/download-yt-dlp.js darwin && electron-builder --mac",
     "build:linux": "electron-vite build && node scripts/download-yt-dlp.js linux && electron-builder --linux"
   },
@@ -51,6 +52,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
+    "cross-env": "^10.1.0",
     "electron": "^43.1.1",
     "electron-builder": "^26.15.3",
     "electron-vite": "^5.0.0",
