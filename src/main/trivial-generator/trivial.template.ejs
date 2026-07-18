@@ -8,7 +8,7 @@
     <title><%=  trivialType.charAt(0).toUpperCase() + trivialType.slice(1) %> Trivial</title>
 </head>
 
-<body class="overflow-y-hidden">
+<body>
     <!--Overlay Effect-->
     <div class="fixed hidden inset-0 z-10 bg-gray-600 bg-opacity-50 h-full w-full" id="modal-overlay">
 
@@ -56,7 +56,7 @@
 
     <!-- Content -->
     <h1 class="trivial-title text-3xl ml-5 mt-5"><%= trivialType.charAt(0).toUpperCase() + trivialType.slice(1) %> Trivial</h1>
-    <div class="flex justify-around w-full py-0 px-5 mt-5 gap-5 overflow-y-auto">
+    <div class="flex justify-around w-full py-0 px-5 mt-5 gap-5">
         <div id="leftPanel" class="w-[250px] px-0 mr-1 flex-shrink-0 sticky top-0">
             <div id="div-controls" class="border rounded border-black w-full px-2 mb-6 h-32 bg-sky-300">
                 <div id="time" class="pt-1 text-lg font-bold">
@@ -69,7 +69,7 @@
                 <div id="div-buttons" class="flex mt-2 justify-evenly">
                     <button id="btn-play" onclick="togglePause();">▶</button>
                     <button id="btn-stop" onclick="stop();">⏹</button>
-                    <button id="btn-reveal" onclick="reveal();">🔎</button>
+                    <button id="btn-reveal" onclick="toggleReveal();" title="Reveal answer">🔎</button>
                     <button id="btn-info" onclick="infoModal(currentId);">ℹ️</button>
                 </div>
                 <input id="volume-range" class="w-full mt-3" type="range" min="0" max="100" step="1"
@@ -101,7 +101,7 @@
                 </div>
             </div>
         </div>
-        <div id="mainPanel" class="w-[88%] px-4 mb-3 h-[80vh]">
+        <div id="mainPanel" class="w-[88%] px-4 mb-3">
             <div id="song-panel-div" class="flex justify-start w-full flex-wrap gap-5">
                 <% 
                 const DIFFICULTY_COLORS = {
@@ -274,15 +274,16 @@
             currentError = songPanel.dataset.error === "true";
 
             resetRoundPoints();
+            updateRevealButton(songId);
         }
 
         function removeFocus(songId) {
             if (!songId) {
                 return;
             }
-            
+
             const songDiv = document.getElementById(songId)
-            
+
             songDiv.classList.remove("border-8");
             songDiv.classList.add("border-4");
 
@@ -296,6 +297,8 @@
             currentId = "";
             currentEmbeddable = null;
             currentError = null;
+
+            updateRevealButton(null);
         }
 
         function markRevealed(songId) {
@@ -310,10 +313,36 @@
                 "url('https://img.youtube.com/vi/" + songId + "/hqdefault.jpg')";
         }
 
-        function reveal() {
+        function unmarkRevealed(songId) {
+            const div = document.getElementById(songId);
+            if (!div) return;
+
+            const answer = document.getElementById(`anime-${songId}`);
+            answer.classList.add("hidden");
+
+            div.classList.remove("revealed");
+            div.style.backgroundImage = "";
+        }
+
+        function updateRevealButton(songId) {
+            const btn = document.getElementById("btn-reveal");
+            const div = songId ? document.getElementById(songId) : null;
+            const isRevealed = div ? div.classList.contains("revealed") : false;
+
+            btn.textContent = isRevealed ? "🙈" : "🔎";
+            btn.title = isRevealed ? "Hide answer" : "Reveal answer";
+        }
+
+        function toggleReveal() {
             if (currentId == "") return;
 
-            markRevealed(currentId);
+            const div = document.getElementById(currentId);
+            if (div.classList.contains("revealed")) {
+                unmarkRevealed(currentId);
+            } else {
+                markRevealed(currentId);
+            }
+
             removeFocus(currentId);
             saveGameState();
         }
