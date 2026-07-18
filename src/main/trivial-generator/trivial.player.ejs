@@ -65,12 +65,16 @@
 
         const scoreDiv = document.getElementById(`score-player-${playerNumber}`);
         scoreDiv.style.display = "flex";
+
+        saveGameState();
     }
 
     function deletePlayer(button) {
         const playerNumber = getPlayerNumber(button);
         const player = document.getElementById(`player-${playerNumber}`);
         player.remove();
+
+        saveGameState();
     }
 
     function editScore(button, mode) {
@@ -81,5 +85,7 @@
         const newScore = mode == "add" ? score + 1 : score - 1;
 
         scoreNumber.innerHTML = newScore;
+
+        saveGameState();
     }
 </script>
