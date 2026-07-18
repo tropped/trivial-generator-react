@@ -63,7 +63,7 @@ function MainMenu() {
   const handleSongFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFile = event.target.files && event.target.files?.[0];
     if (newFile) {
-      setListFile((prev) => ({ ...prev, path: newFile.path }));
+      setListFile((prev) => ({ ...prev, path: window.api.getPathForFile(newFile) }));
     } else {
       setListFile({ path: "", content: { author: "", type: "anime", songs: [] } });
     }

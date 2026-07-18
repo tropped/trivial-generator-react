@@ -1,7 +1,8 @@
-import ytdl from "@distube/ytdl-core";
-
 import fs from "fs";
 import path from "path";
+
+import { logToFile } from "./debug-log";
+import { getYtDlpWrap } from "./yt-dlp-manager";
 
 type DownloadAudioParams = {
   outputDir: string;
@@ -23,23 +24,31 @@ export async function downloadAudio({ outputDir, songId }: DownloadAudioParams) 
     else return false;
   }
 
-  return await new Promise<boolean>((resolve) => {
-    const writeStream = fs.createWriteStream(fullPath);
+  try {
+    const ytDlpWrap = await getYtDlpWrap();
 
-    const download = ytdl(`https://youtu.be/${songId}`, {
-      filter: "audioonly",
-      playerClients: ["ANDROID"]
-    });
+    // Electron's own binary satisfies yt-dlp's Node>=22 requirement when run
+    // with ELECTRON_RUN_AS_NODE, so no separate JS runtime needs to be bundled.
+    await ytDlpWrap.execPromise(
+      [
+        `https://youtu.be/${songId}`,
+        "-f",
+        "bestaudio",
+        "-o",
+        fullPath,
+        "--no-playlist",
+        "--js-runtimes",
+        `node:${process.execPath}`
+      ],
+      { env: { ...process.env, ELECTRON_RUN_AS_NODE: "1" } }
+    );
 
-    download.pipe(writeStream);
-    download.on("end", () => {
-      console.log(`${songId} downloaded`);
-      resolve(true);
-    });
-    download.on("error", (err) => {
-      console.error(`Error downloading ${songId} -- ${err.message}`);
-      console.error(err);
-      resolve(false);
-    });
-  });
+    console.log(`${songId} downloaded`);
+    return true;
+  } catch (err) {
+    const message = err instanceof Error ? (err.stack ?? err.message) : String(err);
+    console.error(`Error downloading ${songId} -- ${message}`);
+    logToFile(`Error downloading ${songId} -- ${message}`);
+    return false;
+  }
 }
