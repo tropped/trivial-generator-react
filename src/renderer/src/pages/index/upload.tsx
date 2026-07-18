@@ -34,7 +34,10 @@ export function UploadFile({ label, button, path, onChange, onClickReset }: Uplo
 
   return (
     <div className="space-y-2">
-      <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700 mx-2">
+      <label
+        htmlFor="file-upload"
+        className="block font-display text-xs uppercase tracking-wider text-muted-foreground mx-2"
+      >
         {label}
       </label>
       <div className="flex items-center space-x-2">
@@ -77,7 +80,10 @@ export function UploadFile({ label, button, path, onChange, onClickReset }: Uplo
 export function UploadFolder({ label, button, path, onClickReset, onClick }: UploadFolderProps) {
   return (
     <div className="space-y-2">
-      <label htmlFor="folder-upload" className="block text-sm font-medium text-gray-700 mx-2">
+      <label
+        htmlFor="folder-upload"
+        className="block font-display text-xs uppercase tracking-wider text-muted-foreground mx-2"
+      >
         {label}
       </label>
       <div className="flex items-center space-x-2">

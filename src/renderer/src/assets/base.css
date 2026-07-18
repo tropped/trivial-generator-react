@@ -1,72 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
-
-    --muted: 223 47% 11%;
-    --muted-foreground: 215.4 16.3% 56.9%;
-
-    --accent: 216 34% 17%;
-    --accent-foreground: 210 40% 98%;
-
-    --popover: 224 71% 4%;
-    --popover-foreground: 215 20.2% 65.1%;
-
-    --border: 216 34% 17%;
-    --input: 216 34% 17%;
-
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 1.2%;
-
-    --secondary: 222.2 47.4% 11.2%;
-    --secondary-foreground: 210 40% 98%;
-
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-
-    --ring: 216 34% 17%;
-
-    --radius: 0.5rem;
-  }
-
+  :root,
   .dark {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
+    /* Stage navy */
+    --background: 231 47% 8%;
+    --foreground: 43 38% 93%;
 
-    --muted: 223 47% 11%;
-    --muted-foreground: 215.4 16.3% 56.9%;
+    --muted: 231 34% 14%;
+    --muted-foreground: 230 14% 62%;
 
-    --accent: 216 34% 17%;
-    --accent-foreground: 210 40% 98%;
+    /* Warm bronze — hover states */
+    --accent: 35 45% 22%;
+    --accent-foreground: 43 38% 95%;
 
-    --popover: 224 71% 4%;
-    --popover-foreground: 215 20.2% 65.1%;
+    --popover: 231 44% 9%;
+    --popover-foreground: 43 38% 93%;
 
-    --border: 216 34% 17%;
-    --input: 216 34% 17%;
+    --border: 231 22% 24%;
+    --input: 231 22% 24%;
 
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
+    --card: 231 40% 11%;
+    --card-foreground: 43 38% 93%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 1.2%;
+    /* Marquee gold */
+    --primary: 42 89% 55%;
+    --primary-foreground: 231 47% 9%;
 
-    --secondary: 222.2 47.4% 11.2%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 231 28% 18%;
+    --secondary-foreground: 43 30% 90%;
 
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
+    /* Buzzer red */
+    --destructive: 353 74% 51%;
+    --destructive-foreground: 43 38% 96%;
 
-    --ring: 216 34% 17%;
+    --ring: 42 89% 55%;
 
-    --radius: 0.5rem;
+    --radius: 0.85rem;
+
+    /* Bespoke tokens, outside the shadcn set */
+    --gold: 42 89% 55%;
+    --gold-dim: 42 60% 40%;
+    --crimson: 353 74% 51%;
+    --emerald: 152 55% 42%;
+
+    --font-display: "Anton", "Arial Narrow", sans-serif;
+    --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
   }
 }
 
@@ -82,37 +65,35 @@
   }
 }
 
-:root {
-  --ev-c-white: #ffffff;
-  --ev-c-white-soft: #f8f8f8;
-  --ev-c-white-mute: #f2f2f2;
-
-  --ev-c-black: #1b1b1f;
-  --ev-c-black-soft: #222222;
-  --ev-c-black-mute: #282828;
-
-  --ev-c-gray-1: #515c67;
-  --ev-c-gray-2: #414853;
-  --ev-c-gray-3: #32363f;
-
-  --ev-c-text-1: rgba(255, 255, 245, 0.86);
-  --ev-c-text-2: rgba(235, 235, 245, 0.6);
-  --ev-c-text-3: rgba(235, 235, 245, 0.38);
-
-  --ev-button-alt-border: transparent;
-  --ev-button-alt-text: var(--ev-c-text-1);
-  --ev-button-alt-bg: var(--ev-c-gray-3);
-  --ev-button-alt-hover-border: transparent;
-  --ev-button-alt-hover-text: var(--ev-c-text-1);
-  --ev-button-alt-hover-bg: var(--ev-c-gray-2);
-}
-
-:root {
-  --color-background: var(--ev-c-black);
-  --color-background-soft: var(--ev-c-black-soft);
-  --color-background-mute: var(--ev-c-black-mute);
-
-  --color-text: var(--ev-c-text-1);
+@layer utilities {
+  .text-glow-gold {
+    text-shadow:
+      0 0 12px hsl(var(--gold) / 0.55),
+      0 0 32px hsl(var(--gold) / 0.25);
+  }
+  .shadow-glow-gold {
+    box-shadow:
+      0 0 0 1px hsl(var(--gold) / 0.4),
+      0 8px 24px -8px hsl(var(--gold) / 0.45);
+  }
+  .shadow-glow-crimson {
+    box-shadow:
+      0 0 0 1px hsl(var(--crimson) / 0.5),
+      0 8px 24px -8px hsl(var(--crimson) / 0.5);
+  }
+  .bg-stage {
+    background:
+      radial-gradient(ellipse 120% 70% at 50% -10%, hsl(var(--gold) / 0.16), transparent 60%),
+      radial-gradient(ellipse 100% 60% at 85% 110%, hsl(var(--crimson) / 0.12), transparent 55%),
+      repeating-linear-gradient(
+        135deg,
+        hsl(var(--foreground) / 0.015) 0px,
+        hsl(var(--foreground) / 0.015) 1px,
+        transparent 1px,
+        transparent 12px
+      ),
+      hsl(var(--background));
+  }
 }
 
 *,
@@ -129,22 +110,8 @@ ul {
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
   line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    "Fira Sans",
-    "Droid Sans",
-    "Helvetica Neue",
-    sans-serif;
+  font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

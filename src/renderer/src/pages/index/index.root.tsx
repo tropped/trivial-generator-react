@@ -84,18 +84,21 @@ function MainMenu() {
   const displayedOutputDir = window.api.path.basename(outputDir) || "Choose output folder";
 
   return (
-    <div className="dark grid grid-cols-[10%_1fr_10%] gap-0 grid-rows-1 h-full min-h-full">
+    <div className="dark bg-stage grid grid-cols-[10%_1fr_10%] gap-0 grid-rows-1 h-full min-h-full">
       <div />
       <div className="grid grid-cols-1 grid-rows-[150px_1fr] gap-20">
-        <div className="mx-auto pt-10 h-32 w-32 flex flex-row justify-center align-center gap-10">
-          <h1 className="mx-auto text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-white">
+        <div className="mx-auto pt-10 flex flex-row items-center justify-center gap-6 animate-rise-in">
+          <MainLogo className="h-24 w-24" />
+          <h1 className="font-display text-glow-gold text-5xl uppercase tracking-wide text-primary md:text-6xl lg:text-7xl">
             Trivial Generator
           </h1>
-          <MainLogo className="mx-auto h-32 w-32 float-right" />
         </div>
 
-        <div className="min-h-screen flex items-start justify-center p-4">
-          <Card className="w-full max-w-md pt-4">
+        <div className="h-full flex items-center justify-center p-4">
+          <Card
+            className="w-full max-w-md pt-4 animate-rise-in"
+            style={{ animationDelay: "120ms" }}
+          >
             <CardContent className="space-y-4">
               <div className="flex justify-center space-x-4">
                 <Button variant="outline" onClick={() => handleListEditorClick("new")}>

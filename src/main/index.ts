@@ -180,11 +180,15 @@ ipcMain.on("youtube:import", async (event, body: ImportPlaylistBody) => {
 
   const { playlistId } = body;
 
-  const listSongs = await importYoutubePlaylist(playlistId).catch((err) => {
-    console.error(err);
-    return [];
-  });
-  console.log(listSongs);
+  let listSongs: Awaited<ReturnType<typeof importYoutubePlaylist>> = [];
+  let error: string | null = null;
 
-  mainWindow.webContents.send("youtube:import:completed", { listSongs });
+  try {
+    listSongs = await importYoutubePlaylist(playlistId);
+  } catch (err) {
+    console.error(err);
+    error = err instanceof Error ? err.message : "Failed to import playlist";
+  }
+
+  mainWindow.webContents.send("youtube:import:completed", { listSongs, error });
 });

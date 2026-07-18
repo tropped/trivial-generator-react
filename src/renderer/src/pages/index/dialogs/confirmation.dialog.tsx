@@ -59,7 +59,7 @@ export default function ConfirmationDialog({
                 defaultValue={songAmount}
                 type="number"
                 readOnly
-                className="max-w-10 px-0 pl-2"
+                className="w-16 px-2 text-center"
               />
             </div>
 

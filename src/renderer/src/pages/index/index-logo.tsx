@@ -6,7 +6,7 @@ type MainLogoProps = {
 
 export default function MainLogo({ className }: MainLogoProps) {
   const defaultClassName =
-    " select-none transition-filter duration-300 hover:drop-shadow-[0_0_1.2em_#6988e6aa]  ";
+    " select-none transition-filter duration-300 drop-shadow-[0_0_0.8em_#f0b02e66] hover:drop-shadow-[0_0_1.2em_#f0b02eaa]  ";
   const finalClassName = defaultClassName + className;
 
   return (

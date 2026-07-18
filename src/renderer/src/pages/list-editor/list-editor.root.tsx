@@ -63,6 +63,7 @@ function ListEditor() {
   const [listPath, setListPath] = useState(mode === "edit" ? originalListPath || "" : "");
 
   const [isImportLoading, setIsImportLoading] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
 
   const tableDivRef = useRef<HTMLTableElement>(null);
 
@@ -85,7 +86,16 @@ function ListEditor() {
 
   useEffect(() => {
     const handleYoutubePlaylistImported = (_, params) => {
-      const listSongs = params.listSongs;
+      const { listSongs, error } = params;
+
+      setIsImportLoading(false);
+
+      if (error) {
+        setImportError(error);
+        return;
+      }
+
+      setImportError(null);
 
       const parsedNewSongs = listSongs.map((song) => {
         const newRow = buildDefaultRow(listType);
@@ -100,7 +110,6 @@ function ListEditor() {
       const newData = [...data, ...parsedNewSongs];
 
       setData(newData);
-      setIsImportLoading(false);
     };
 
     return window.electron.ipcRenderer.on(
@@ -164,8 +173,8 @@ function ListEditor() {
   const canSave = isCurrentDataValid && listPath?.length;
 
   return (
-    <div className="container mx-0 max-w-full w-full py-10">
-      <h1 className="mx-auto mb-6 text-xl font-extrabold leading-none tracking-tight md:text-2xl lg:text-3xl text-white">
+    <div className="dark bg-stage container mx-0 max-w-full w-full py-10 overflow-y-auto">
+      <h1 className="font-display text-glow-gold mx-auto mb-6 text-2xl uppercase tracking-wide text-primary md:text-3xl lg:text-4xl">
         List Editor
       </h1>
       <ListEditorTable
@@ -180,10 +189,14 @@ function ListEditor() {
         <Card className="w-full max-w-[50%] pt-4">
           <CardContent className="space-y-4">
             <div className="grid grid-cols-[30%,1fr] grid-flow-row gap-5">
-              <Label className="text-2xl text-right w-full">Output File:</Label>
+              <Label className="font-display text-xl uppercase tracking-wide text-right w-full">
+                Output File:
+              </Label>
               <SaveAs button={displayedListPath} path={listPath} onClick={handleInputSaveAsClick} />
 
-              <Label className="text-2xl text-right">Author:</Label>
+              <Label className="font-display text-xl uppercase tracking-wide text-right">
+                Author:
+              </Label>
               <Input
                 className="w-[150px]"
                 placeholder="Author..."
@@ -191,8 +204,10 @@ function ListEditor() {
                 onChange={(e) => setAuthor(e.target.value)}
               ></Input>
 
-              <Label className="text-2xl text-right w-full">Songs:</Label>
-              <Label className="text-xl text-start self-end">{data.length}</Label>
+              <Label className="font-display text-xl uppercase tracking-wide text-right w-full">
+                Songs:
+              </Label>
+              <Label className="text-xl text-start self-end text-primary">{data.length}</Label>
             </div>
           </CardContent>
         </Card>
@@ -220,7 +235,12 @@ function ListEditor() {
               <Button variant="default" onClick={handleAddRowClick}>
                 Add row
               </Button>
-              <YoutubeDialog isLoading={isImportLoading} setIsLoading={setIsImportLoading} />
+              <YoutubeDialog
+                isLoading={isImportLoading}
+                setIsLoading={setIsImportLoading}
+                error={importError}
+                clearError={() => setImportError(null)}
+              />
             </div>
           </CardContent>
         </Card>

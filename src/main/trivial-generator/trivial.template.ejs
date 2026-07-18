@@ -8,7 +8,7 @@
     <title><%=  trivialType.charAt(0).toUpperCase() + trivialType.slice(1) %> Trivial</title>
 </head>
 
-<body class="bg-sky-800 overflow-y-hidden">
+<body class="overflow-y-hidden">
     <!--Overlay Effect-->
     <div class="fixed hidden inset-0 z-10 bg-gray-600 bg-opacity-50 h-full w-full" id="modal-overlay">
 
@@ -37,8 +37,8 @@
     </div>
 
     <!-- Content -->
-    <h1 class="text-white font-bold text-2xl ml-5 mt-5"><%= trivialType.charAt(0).toUpperCase() + trivialType.slice(1) %> Trivial</h1>
-    <div class="flex justify-around w-full py-0 px-5 mt-5 gap-5 overflow-y-scroll">
+    <h1 class="trivial-title text-3xl ml-5 mt-5"><%= trivialType.charAt(0).toUpperCase() + trivialType.slice(1) %> Trivial</h1>
+    <div class="flex justify-around w-full py-0 px-5 mt-5 gap-5 overflow-y-auto">
         <div id="leftPanel" class="w-[250px] px-0 mr-1 flex-shrink-0 sticky top-0">
             <div id="div-controls" class="border rounded border-black w-full px-2 mb-6 h-32 bg-sky-300">
                 <div id="time" class="pt-1 text-lg font-bold">
@@ -278,8 +278,9 @@
 
             answer.classList.remove("hidden");
 
+            div.classList.add("revealed");
             div.style.backgroundImage =
-                "url('http://img.youtube.com/vi/" + currentId + "/0.jpg')";
+                "url('https://img.youtube.com/vi/" + currentId + "/hqdefault.jpg')";
             removeFocus(currentId);
         }
 
