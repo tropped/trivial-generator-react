@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { Trash2 } from "lucide-react";
+import { ChevronUp, ChevronDown, Trash2 } from "lucide-react";
 import { ListEditorTableMeta } from "./list-editor-table";
 
 type ArrowButtonProps = {
@@ -11,7 +11,7 @@ type ArrowButtonProps = {
 };
 
 const ArrowButton = ({ rowIndex, rowAmount, direction, moveRowFunction }: ArrowButtonProps) => {
-  const arrow = direction === "up" ? "▲" : "▼";
+  const Icon = direction === "up" ? ChevronUp : ChevronDown;
 
   if (direction === "up" && rowIndex === 0) {
     return null;
@@ -26,7 +26,7 @@ const ArrowButton = ({ rowIndex, rowAmount, direction, moveRowFunction }: ArrowB
       className="text-muted-foreground hover:text-primary p-0 focus:outline-none"
       onClick={() => moveRowFunction(rowIndex)}
     >
-      {arrow}
+      <Icon size={16} />
     </button>
   );
 };

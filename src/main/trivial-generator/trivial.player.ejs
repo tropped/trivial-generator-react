@@ -11,16 +11,16 @@
 
         const newPlayer = `<div id="player-${newPlayerNumber}" name="player" class="flex justify-start border gap-0 border-black rounded w-full bg-sky-300 p-2">
             <div class="w-9/12" id="div-name-${newPlayerNumber}">
-            <input id="name-${newPlayerNumber}" type="text" placeholder="New player" class="px-1 bg-transparent w-full" onkeydown="enterName(event);">
+            <input id="name-${newPlayerNumber}" type="text" placeholder="New player" class="player-name-input px-1 bg-transparent w-full" onkeydown="enterName(event);">
             </div>
             <div>
-            <button onclick="confirmPlayer(this);" id="confirm-player-${newPlayerNumber}">✅</button>
-            <button onclick="deletePlayer(this);" id="delete-player-${newPlayerNumber}">❌</button>
+            <button class="player-icon-btn" onclick="confirmPlayer(this);" id="confirm-player-${newPlayerNumber}">✅</button>
+            <button class="player-icon-btn" onclick="deletePlayer(this);" id="delete-player-${newPlayerNumber}">❌</button>
             </div>
             <div id="score-player-${newPlayerNumber}" class="flex justify-end gap-0 w-24 box-border" style="display:none">
-            <button id="score-minus-${newPlayerNumber}" class="bg-red-600 w-5 h-6 rounded-tl rounded-bl" onclick="editScore(this, 'remove');"> - </button>
-            <span id="score-number-${newPlayerNumber}" class="text-center w-8 h-6 border border-black"> 0 </span>
-            <button id="score-plus-${newPlayerNumber}" class="bg-green-600 w-5 h-6 rounded-tr rounded-br" onclick="editScore(this, 'add');"> + </button>
+            <button id="score-minus-${newPlayerNumber}" class="score-btn score-btn-minus w-5 h-6 rounded-tl rounded-bl" onclick="editScore(this, 'remove');"> - </button>
+            <span id="score-number-${newPlayerNumber}" class="score-number text-center w-8 h-6"> 0 </span>
+            <button id="score-plus-${newPlayerNumber}" class="score-btn score-btn-plus w-5 h-6 rounded-tr rounded-br" onclick="editScore(this, 'add');"> + </button>
             </div>
         </div>`;
         playersDiv.insertAdjacentHTML("beforeend", newPlayer);
