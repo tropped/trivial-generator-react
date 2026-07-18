@@ -81,6 +81,7 @@ export default function ProgressDialog({
     return (
       <CompletedDialog
         outputDir={outputDir}
+        failedIds={failedIds}
         setFailedIds={setFailedIds}
         setStep={setStep}
         setUnembeddableIds={setUnembeddableIds}

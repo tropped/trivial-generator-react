@@ -14,16 +14,16 @@
 
         <!-- Modal Content -->
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div class="font-mono mt-3">
-                <h3 class="text-lg text-center leading-6 font-medium text-gray-900">Información extra:</h3>
+            <div class="modal-body mt-3">
+                <h3 class="text-lg text-center leading-6 font-medium text-gray-900">Extra info:</h3>
                 <div class="mt-2 px-7 py-3">
                     <ul>
-                        <li style="display:none;"><span class="font-bold">Anime: </span><span id="modal-anime"></span></li>
-                        <li style="display:none;"><span class="font-bold">Juego: </span><span id="modal-game"></span></li>
-                        <li style="display:none;"><span class="font-bold">Saga: </span><span id="modal-saga"></span></li>
-                        <li style="display:none;"><span class="font-bold">Tipo: </span><span id="modal-oped"></span></li>
-                        <li style="display:none;"><span class="font-bold">Banda: </span><span id="modal-band"></span></li>
-                        <li style="display:none;"><span class="font-bold">Canción: </span><span id="modal-song"></span></li>
+                        <li style="display:none;"><span class="modal-label">Anime: </span><span id="modal-anime"></span></li>
+                        <li style="display:none;"><span class="modal-label">Game: </span><span id="modal-game"></span></li>
+                        <li style="display:none;"><span class="modal-label">Saga: </span><span id="modal-saga"></span></li>
+                        <li style="display:none;"><span class="modal-label">Type: </span><span id="modal-oped"></span></li>
+                        <li style="display:none;"><span class="modal-label">Band: </span><span id="modal-band"></span></li>
+                        <li style="display:none;"><span class="modal-label">Song: </span><span id="modal-song"></span></li>
                     </ul>
                 </div>
                 <div class="items-center px-4 py-3">
@@ -65,7 +65,7 @@
 
             <div id="div-scoreboard" class="w-full">
                 <button
-                    class="w-28 p-1 flex mx-auto border border-black shadow-sm text-sm font-medium rounded-md text-white bg-teal-500 hover:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    class="add-player-btn w-28 p-1 flex mx-auto border border-black shadow-sm text-sm font-medium rounded-md text-white bg-teal-500 hover:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     onclick="addPlayer()">
                     <span class="w-full text-center">Add player</span>
                 </button>
@@ -85,8 +85,8 @@
                 };
                     songs.forEach((song, index) => { %>
                         <div id="<%= song.id %>"  data-embeddable="<%= song.isEmbeddable %>" data-error="<%= song.isError %>" data-difficulty="<%= song.difficulty %>" name="song-panel"
-                    class="border-4 <%= DIFFICULTY_COLORS[song.difficulty] %> xl:basis-56 lg:basis-52 bg-no-repeat bg-center bg-cover relative basis-60 flex-shrink-0 h-[10rem] pl-1
-                        <%= song.isError ? " bg-black" : "" %>" onclick="toggleAudio(this.id);">
+                    class="border-4 <%= DIFFICULTY_COLORS[song.difficulty] %> xl:basis-56 lg:basis-52 bg-no-repeat bg-center bg-cover relative basis-60 flex-shrink-0 h-[10rem] pl-1"
+                        <%= song.isError ? "" : `onclick="toggleAudio(this.id);"` %>>
                             <span class="font-bold"><%= index + 1 %></span>
                             <span id="anime-<%=song.id%>" class="hidden font-mono absolute bottom-0 left-0 px-1 w-full bg-black text-white">
                                 <%= trivialType === "anime" ? song.anime : trivialType === "game" ? song.game : song.name %>
