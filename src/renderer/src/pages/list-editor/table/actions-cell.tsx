@@ -23,7 +23,7 @@ const ArrowButton = ({ rowIndex, rowAmount, direction, moveRowFunction }: ArrowB
 
   return (
     <button
-      className="text-gray-600 hover:text-gray-800 p-0 focus:outline-none"
+      className="text-muted-foreground hover:text-primary p-0 focus:outline-none"
       onClick={() => moveRowFunction(rowIndex)}
     >
       {arrow}
@@ -56,7 +56,7 @@ const ActionsCell = ({ row, table }) => {
       </div>
 
       <Trash2
-        className="cursor-pointer"
+        className="cursor-pointer text-muted-foreground transition-colors hover:text-destructive"
         onClick={() => {
           tableMeta.deleteRow(row.index);
         }}

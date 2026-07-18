@@ -54,7 +54,8 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)"
       },
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans]
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+        display: ["var(--font-display)", ...fontFamily.sans]
       },
       keyframes: {
         "accordion-down": {
@@ -64,11 +65,21 @@ module.exports = {
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" }
+        },
+        "marquee-pulse": {
+          "0%, 100%": { opacity: 1 },
+          "50%": { opacity: 0.55 }
+        },
+        "rise-in": {
+          from: { opacity: 0, transform: "translateY(12px)" },
+          to: { opacity: 1, transform: "translateY(0)" }
         }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out"
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "marquee-pulse": "marquee-pulse 2.2s ease-in-out infinite",
+        "rise-in": "rise-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both"
       }
     }
   },

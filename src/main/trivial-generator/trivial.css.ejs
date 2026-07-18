@@ -1095,3 +1095,242 @@
         }
     }
 </style>
+
+<style id="trivial-theme">
+    @import url("https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&display=swap");
+
+    :root {
+        --stage-bg: #0b1229;
+        --gold: #f0b02e;
+        --gold-dim: #b98a2a;
+        --crimson: #e0344a;
+        --emerald: #2fbf71;
+        --cream: #f4ecd8;
+        --panel: #141c3d;
+        --panel-border: #33406e;
+    }
+
+    html {
+        height: 100%;
+        background:
+            radial-gradient(ellipse 120% 70% at 50% -10%, rgba(240, 176, 46, 0.16), transparent 60%),
+            radial-gradient(ellipse 100% 60% at 85% 110%, rgba(224, 52, 74, 0.12), transparent 55%),
+            repeating-linear-gradient(
+                135deg,
+                rgba(244, 236, 216, 0.015) 0px,
+                rgba(244, 236, 216, 0.015) 1px,
+                transparent 1px,
+                transparent 12px
+            ),
+            var(--stage-bg) !important;
+    }
+
+    body {
+        min-height: 100%;
+        font-family: "Archivo", ui-sans-serif, system-ui, sans-serif !important;
+        background: transparent !important;
+        color: var(--cream);
+    }
+
+    .trivial-title {
+        font-family: "Anton", "Arial Narrow", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--gold);
+        text-shadow:
+            0 0 12px rgba(240, 176, 46, 0.55),
+            0 0 32px rgba(240, 176, 46, 0.25);
+    }
+
+    #div-controls {
+        background: var(--panel) !important;
+        border: 2px solid var(--panel-border) !important;
+        box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+    }
+
+    #progressBar {
+        background: rgba(244, 236, 216, 0.12) !important;
+        border: 1px solid var(--panel-border);
+    }
+
+    #progressBarCurrent {
+        background: linear-gradient(90deg, var(--gold-dim), var(--gold)) !important;
+        box-shadow: 0 0 10px rgba(240, 176, 46, 0.6);
+    }
+
+    #div-buttons button {
+        font-family: "Anton", sans-serif;
+        font-size: 1.1rem;
+        width: 2.4rem;
+        height: 2.4rem;
+        border-radius: 9999px;
+        border: 2px solid var(--panel-border);
+        background: #1c2550;
+        color: var(--cream);
+        transition:
+            transform 0.12s ease,
+            box-shadow 0.12s ease,
+            border-color 0.12s ease;
+    }
+
+    #div-buttons button:hover {
+        border-color: var(--gold);
+        box-shadow: 0 0 12px rgba(240, 176, 46, 0.45);
+    }
+
+    #div-buttons button:active {
+        transform: scale(0.92);
+    }
+
+    [name="song-panel"] {
+        --panel-tint: var(--gold);
+        background-image:
+            radial-gradient(ellipse 90% 70% at 50% 40%, rgba(255, 255, 255, 0.04), transparent 70%);
+        background-color: var(--panel);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        border-width: 4px !important;
+        border-radius: 0.6rem;
+        min-height: 11rem;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+            transform 0.15s ease,
+            box-shadow 0.15s ease;
+    }
+
+    [name="song-panel"]::before {
+        content: "?";
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Anton", sans-serif;
+        font-size: 6rem;
+        color: var(--panel-tint);
+        opacity: 0.16;
+        pointer-events: none;
+    }
+
+    [name="song-panel"]::after {
+        content: attr(data-difficulty);
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.65rem;
+        font-family: "Anton", sans-serif;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--panel-tint);
+        opacity: 0.75;
+        pointer-events: none;
+    }
+
+    [name="song-panel"]:hover {
+        transform: translateY(-3px);
+    }
+
+    [name="song-panel"][data-difficulty="easy"] {
+        border-color: var(--emerald) !important;
+        --panel-tint: var(--emerald);
+    }
+
+    [name="song-panel"][data-difficulty="normal"] {
+        border-color: var(--gold) !important;
+        --panel-tint: var(--gold);
+    }
+
+    [name="song-panel"][data-difficulty="hard"] {
+        border-color: var(--crimson) !important;
+        --panel-tint: var(--crimson);
+    }
+
+    [name="song-panel"].border-8 {
+        border-color: var(--crimson) !important;
+        box-shadow:
+            0 0 0 1px rgba(224, 52, 74, 0.5),
+            0 0 24px rgba(224, 52, 74, 0.5);
+    }
+
+    [name="song-panel"].revealed::before,
+    [name="song-panel"].revealed::after {
+        content: none;
+    }
+
+    [name="song-panel"].revealed {
+        box-shadow: inset 0 -70px 40px -25px rgba(11, 18, 41, 0.9);
+    }
+
+    [name="song-panel"] span.font-bold {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.75rem;
+        height: 1.75rem;
+        padding: 0 0.35rem;
+        border-radius: 9999px;
+        font-family: "Anton", sans-serif;
+        font-size: 0.9rem;
+        background: var(--stage-bg);
+        border: 2px solid var(--panel-tint);
+        color: var(--panel-tint);
+    }
+
+    #div-scoreboard button {
+        font-family: "Anton", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        border: 2px solid var(--gold) !important;
+        background: var(--gold) !important;
+        color: var(--stage-bg) !important;
+        box-shadow: 0 0 12px rgba(240, 176, 46, 0.35);
+        transition: transform 0.12s ease;
+    }
+
+    #div-scoreboard button:active {
+        transform: scale(0.95);
+    }
+
+    [name="player"] {
+        background: var(--panel) !important;
+        border: 2px solid var(--panel-border) !important;
+        border-radius: 0.5rem;
+    }
+
+    #modal-overlay .bg-white {
+        background: var(--panel) !important;
+        border: 2px solid var(--gold);
+    }
+
+    #modal-overlay h3,
+    #modal-overlay .text-gray-900 {
+        font-family: "Anton", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: var(--gold) !important;
+    }
+
+    #ok-btn {
+        font-family: "Anton", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        background: var(--gold) !important;
+        color: var(--stage-bg) !important;
+    }
+
+    #ok-btn:hover {
+        background: var(--gold-dim) !important;
+    }
+
+    #modal-overlay.bg-gray-600 {
+        background-color: rgba(11, 18, 41, 0.75) !important;
+    }
+</style>
