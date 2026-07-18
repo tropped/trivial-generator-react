@@ -37,7 +37,7 @@
     </div>
 
     <!--Confirm Modal-->
-    <div class="fixed hidden inset-0 z-20 bg-gray-600 bg-opacity-50 h-full w-full" id="confirm-modal-overlay">
+    <div class="fixed hidden inset-0 z-10 bg-gray-600 bg-opacity-50 h-full w-full" id="confirm-modal-overlay">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div class="modal-body mt-3">
                 <h3 class="text-lg text-center leading-6 font-medium text-gray-900">Confirm</h3>
@@ -112,7 +112,7 @@
                     songs.forEach((song, index) => { %>
                         <div id="<%= song.id %>"  data-embeddable="<%= song.isEmbeddable %>" data-error="<%= song.isError %>" data-difficulty="<%= song.difficulty %>" name="song-panel"
                     class="border-4 <%= DIFFICULTY_COLORS[song.difficulty] %> xl:basis-56 lg:basis-52 bg-no-repeat bg-center bg-cover relative basis-60 flex-shrink-0 h-[10rem] pl-1"
-                        <%= song.isError ? "" : `onclick="toggleAudio(this.id);"` %>>
+                        <%- song.isError ? "" : `onclick="toggleAudio(this.id);"` %>>
                             <span class="font-bold"><%= index + 1 %></span>
                             <span id="anime-<%=song.id%>" class="hidden font-mono absolute bottom-0 left-0 px-1 w-full bg-black text-white">
                                 <%= trivialType === "anime" ? song.anime : trivialType === "game" ? song.game : song.name %>
