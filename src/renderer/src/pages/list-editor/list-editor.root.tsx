@@ -52,6 +52,19 @@ function buildDefaultRow(type: ListType): Song {
   throw new Error("Invalid type!");
 }
 
+function parseYoutubeTitle(title: string): { band: string; name: string } {
+  const separatorIndex = title.indexOf(" - ");
+
+  if (separatorIndex === -1) {
+    return { band: "", name: title };
+  }
+
+  return {
+    band: title.slice(0, separatorIndex).trim(),
+    name: title.slice(separatorIndex + " - ".length).trim()
+  };
+}
+
 function ListEditor() {
   const { originalListPath, originalOutputDir, mode } = useLocation().state as ListEditorProps;
 
@@ -101,8 +114,15 @@ function ListEditor() {
         const newRow = buildDefaultRow(listType);
 
         newRow.id = song.id;
-        newRow.name = song.title;
         newRow.link = `https://youtu.be/${song.id}`;
+
+        if ("band" in newRow) {
+          const { band, name } = parseYoutubeTitle(song.title);
+          newRow.band = band;
+          newRow.name = name;
+        } else {
+          newRow.name = song.title;
+        }
 
         return newRow;
       });
