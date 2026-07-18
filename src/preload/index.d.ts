@@ -1,5 +1,5 @@
 import { ElectronAPI } from "@electron-toolkit/preload";
-import { shell } from "electron";
+import { shell, webUtils } from "electron";
 import { basename, dirname, join } from "path";
 
 const api = {
@@ -16,7 +16,8 @@ const api = {
   },
   shell: {
     openPath: shell.openPath
-  }
+  },
+  getPathForFile: (file: File) => webUtils.getPathForFile(file)
 };
 
 declare global {

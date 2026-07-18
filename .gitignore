@@ -1,6 +1,7 @@
 node_modules
 dist
 out
+resources/bin
 .DS_Store
 *.log*
 tests

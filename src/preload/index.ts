@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer, shell } from "electron";
+import { contextBridge, ipcRenderer, shell, webUtils } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
 
 import * as fs from "fs";
@@ -16,7 +16,8 @@ const api = {
   path: path,
   shell: {
     openPath: shell.openPath
-  }
+  },
+  getPathForFile: (file: File) => webUtils.getPathForFile(file)
 };
 
 export type RendererAPI = typeof api;
