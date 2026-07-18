@@ -64,11 +64,19 @@
             </div>
 
             <div id="div-scoreboard" class="w-full">
-                <button
-                    class="add-player-btn w-28 p-1 flex mx-auto border border-black shadow-sm text-sm font-medium rounded-md text-white bg-teal-500 hover:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    onclick="addPlayer()">
-                    <span class="w-full text-center">Add player</span>
-                </button>
+                <div class="flex gap-2 justify-center">
+                    <button
+                        class="add-player-btn w-28 p-1 flex border border-black shadow-sm text-sm font-medium rounded-md text-white bg-teal-500 hover:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        onclick="addPlayer()">
+                        <span class="w-full text-center">Add player</span>
+                    </button>
+
+                    <button
+                        class="reset-game-btn w-28 p-1 flex border text-sm font-medium rounded-md focus:outline-none"
+                        onclick="resetGame()">
+                        <span class="w-full text-center">Reset game</span>
+                    </button>
+                </div>
 
                 <div id="players" class="w-full mt-2">
 
@@ -270,19 +278,109 @@
             currentError = null;
         }
 
-        function reveal() {
-            if (currentId == "") return;
+        function markRevealed(songId) {
+            const div = document.getElementById(songId);
+            if (!div) return;
 
-            const div = document.getElementById(currentId);
-            const answer = document.getElementById(`anime-${currentId}`);
-
+            const answer = document.getElementById(`anime-${songId}`);
             answer.classList.remove("hidden");
 
             div.classList.add("revealed");
             div.style.backgroundImage =
-                "url('https://img.youtube.com/vi/" + currentId + "/hqdefault.jpg')";
-            removeFocus(currentId);
+                "url('https://img.youtube.com/vi/" + songId + "/hqdefault.jpg')";
         }
+
+        function reveal() {
+            if (currentId == "") return;
+
+            markRevealed(currentId);
+            removeFocus(currentId);
+            saveGameState();
+        }
+
+        // ************
+        //  PERSISTENCE
+        // ************
+        // Chromium shares one localStorage bucket across every file:// page
+        // regardless of path or filename, so the key itself -- not the file
+        // location -- is what keeps different generated trivials from
+        // clobbering each other's saved state.
+        let isRestoringState = false;
+
+        function getSongSignature() {
+            return songs.map((song) => song.id).join("|");
+        }
+
+        function getStorageKey() {
+            return `trivial-game-state:${getSongSignature()}`;
+        }
+
+        function saveGameState() {
+            if (isRestoringState) return;
+
+            const players = Array.from(document.getElementsByName("player")).map((playerDiv) => {
+                const number = getPlayerNumber(playerDiv);
+                const nameInput = document.getElementById(`name-${number}`);
+                const scoreSpan = document.getElementById(`score-number-${number}`);
+
+                return {
+                    name: nameInput.value,
+                    confirmed: nameInput.disabled,
+                    score: scoreSpan ? parseInt(scoreSpan.innerHTML) : 0
+                };
+            });
+
+            const revealed = Array.from(document.getElementsByName("song-panel"))
+                .filter((div) => div.classList.contains("revealed"))
+                .map((div) => div.id);
+
+            const state = { signature: getSongSignature(), players, revealed };
+            localStorage.setItem(getStorageKey(), JSON.stringify(state));
+        }
+
+        function resetGame() {
+            if (!confirm("Reset all players and revealed songs?")) return;
+            localStorage.removeItem(getStorageKey());
+            location.reload();
+        }
+
+        function loadGameState() {
+            const raw = localStorage.getItem(getStorageKey());
+            if (!raw) return;
+
+            let state;
+            try {
+                state = JSON.parse(raw);
+            } catch (err) {
+                localStorage.removeItem(getStorageKey());
+                return;
+            }
+
+            if (!state || state.signature !== getSongSignature()) {
+                localStorage.removeItem(getStorageKey());
+                return;
+            }
+
+            isRestoringState = true;
+
+            state.revealed.forEach(markRevealed);
+
+            state.players.forEach((player) => {
+                const playerDiv = addPlayer();
+                const number = getPlayerNumber(playerDiv);
+
+                document.getElementById(`name-${number}`).value = player.name;
+
+                if (player.confirmed) {
+                    confirmPlayer(document.getElementById(`confirm-player-${number}`));
+                    document.getElementById(`score-number-${number}`).innerHTML = player.score;
+                }
+            });
+
+            isRestoringState = false;
+        }
+
+        window.addEventListener("load", loadGameState);
 
         function setVolume(percent) {
             player.setVolume(percent);
